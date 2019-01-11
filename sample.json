@@ -11,7 +11,7 @@
     }
   },
   "variables": {
-    "uri" : "[uri(deployment().properties.templateLink.uri,'')]"
+    "uri" : "https://raw.githubusercontent.com/DamianFlynn/arm/master"
   },
   "functions": [],
   "resources": [
