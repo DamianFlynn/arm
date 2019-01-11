@@ -10,7 +10,7 @@
     },
     "location": {
       "type": "string",
-      "defaultValue": "eastus"
+      "defaultValue": "[resourceGroup().location]"
     },
     "contactEmail": {
       "type": "string",
