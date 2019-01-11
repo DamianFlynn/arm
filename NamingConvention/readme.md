@@ -41,7 +41,7 @@ The following attributes are exported:
 Resource Groups can be imported using the resource id, e.g.
 
 ```bash
-az group deployment create -g BM-Demo01 --template-file .\naming-convention.json  --parameters '{\"companyName\": {\"value\": \"bm\"},\"projectName\": {\"value\": \"myProject\"},\"environment\": {\"value\": \"Test\"}}' 
+az group deployment create -g BM-Demo01 --template-uri https://raw.githubusercontent.com/DamianFlynn/arm/master/NamingConvention/namingConvention.json --parameters '{\"companyName\": {\"value\": \"bm\"},\"projectName\": {\"value\": \"myProject\"},\"environment\": {\"value\": \"Test\"}}'
 ```
 
 ```json
