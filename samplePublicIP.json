@@ -11,7 +11,7 @@
     }
   },
   "variables": {
-    "uri" : "[uri(deployment().properties.templateLink.uri,'')]"
+    "uri" : "https://raw.githubusercontent.com/DamianFlynn/arm/master/"
   },
   "functions": [],
   "resources": [
@@ -40,7 +40,7 @@
       "properties": {
         "mode": "Incremental",
         "templateLink": {
-          "uri": "[uri(deployment().properties.templateLink.uri, 'PublicIP/PublicIP.json')]",
+          "uri": "[concat(variables('uri'),'/PublicIP/PublicIP.json')]",
           "contentVersion": "1.0.0.0"
         },
         "parameters": {
