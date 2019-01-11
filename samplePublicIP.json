@@ -11,7 +11,7 @@
     }
   },
   "variables": {
-    "uri" : "https://raw.githubusercontent.com/DamianFlynn/arm/master/"
+    "uri" : "https://raw.githubusercontent.com/DamianFlynn/arm/master"
   },
   "functions": [],
   "resources": [
