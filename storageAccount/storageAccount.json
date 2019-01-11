@@ -28,19 +28,19 @@
     "environment": {
       "type": "string",
       "allowedValues": [
-        "Production",
+        "Prod",
         "Test",
-        "Developer",
-        "Proof of concept"
+        "Dev",
+        "POC"
       ],
-      "defaultValue": "Developer",
+      "defaultValue": "Dev",
       "metadata": {
         "description": "Type of environment"
       }
     }
   },
   "variables": {
-    "storageName" : "[replace(parameters('name'),'{resourceType}','lrs')]"
+    "storageName" : "[replace(parameters('name'),'{resourcetype}','lrs')]"
   },
   
   "resources": [
