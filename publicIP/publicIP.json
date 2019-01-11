@@ -11,6 +11,23 @@
     "location": {
       "type": "string",
       "defaultValue": "eastus"
+    },
+    "contactEmail": {
+      "type": "string",
+      "defaultValue": "damian.flynn@innofactor.com"
+    },
+    "environment": {
+      "type": "string",
+      "allowedValues": [
+        "Production",
+        "Test",
+        "Developer",
+        "Proof of concept"
+      ],
+      "defaultValue": "Developer",
+      "metadata": {
+        "description": "Type of environment"
+      }
     }
   },
   "variables": {
@@ -22,6 +39,11 @@
       "name": "[variables('pipName')]",
       "apiVersion": "2017-06-01",
       "location": "[parameters('location')]",
+      "tags": {
+        "Contact": "[parameters('contactEmail')]",
+        "Project": "[parameters('name')]",
+        "Environment": "[parameters('environment')]"
+      },
       "properties": {
         "publicIPAddressVersion": "IPv4",
         "publicIPAllocationMethod": "Dynamic",

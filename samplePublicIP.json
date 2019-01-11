@@ -8,6 +8,23 @@
       "metadata": {
         "description": "Short description of the project"
       }
+    },
+    "contactEmail": {
+      "type": "string",
+      "defaultValue": "damian.flynn@innofactor.com"
+    },
+    "environment": {
+      "type": "string",
+      "allowedValues": [
+        "Production",
+        "Test",
+        "Developer",
+        "Proof of concept"
+      ],
+      "defaultValue": "Developer",
+      "metadata": {
+        "description": "Type of environment"
+      }
     }
   },
   "variables": {
@@ -45,7 +62,9 @@
         },
         "parameters": {
           "name": {
-            "value": "[reference(concat(deployment().name, '-gov')).outputs.defaultConvention.value]"
+            "value": "[reference(concat(deployment().name, '-gov')).outputs.defaultConvention.value]",
+            "environment":"[parameters('environment')]",
+            "contactEmail":"[parameters('contactEmail')]"
           }
         }
       },
