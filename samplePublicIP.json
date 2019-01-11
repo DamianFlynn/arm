@@ -35,7 +35,7 @@
 
     {
       "apiVersion": "2017-05-10",
-      "name": "[replace(reference('bm-namingconvention-gov').outputs.defaultConvention.value,'{resourceType}','pip0')]",
+      "name": { "value": "[replace(reference('bm-namingconvention-gov').outputs.defaultConvention.value,'{resourceType}','pip0')]" },
       "type": "Microsoft.Resources/deployments",
       "properties": {
         "mode": "Incremental",
