@@ -11,7 +11,7 @@
     }
   },
   "variables": {
-    "uri" : "[uri(deployment().properties.templateLink.uri,'DamianFlynn/ARM')]"
+    "uri" : "[uri(deployment().properties.templateLink.uri,'')]"
   },
   "functions": [],
   "resources": [
