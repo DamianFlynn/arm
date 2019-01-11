@@ -40,7 +40,7 @@
       "properties": {
         "mode": "Incremental",
         "templateLink": {
-          "uri": "[concat(variables('uri'),'/PublicIP/PublicIP.json')]",
+          "uri": "[concat(variables('uri'),'/publicIP/publicIP.json')]",
           "contentVersion": "1.0.0.0"
         },
         "parameters": {
