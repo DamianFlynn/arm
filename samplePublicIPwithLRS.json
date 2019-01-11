@@ -1,0 +1,111 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "projectName": {
+      "type": "string",
+      "minLength": 2,
+      "metadata": {
+        "description": "Short description of the project"
+      }
+    },
+    "contactEmail": {
+      "type": "string",
+      "defaultValue": "damian.flynn@innofactor.com"
+    },
+    "environment": {
+      "type": "string",
+      "allowedValues": [
+        "Production",
+        "Test",
+        "Developer",
+        "Proof of concept"
+      ],
+      "defaultValue": "Developer",
+      "metadata": {
+        "description": "Type of environment"
+      }
+    }
+  },
+  "variables": {
+    "uri": "https://raw.githubusercontent.com/DamianFlynn/arm/master"
+  },
+  "functions": [],
+  "resources": [
+    {
+      "apiVersion": "2017-05-10",
+      "name": "[concat(deployment().name, '-gov')]",
+      "type": "Microsoft.Resources/deployments",
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[concat(variables('uri'),'/namingConvention/namingConvention.json')]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "projectName": {
+            "value": "[parameters('projectName')]"
+          }
+        }
+      }
+    },
+    {
+      "apiVersion": "2017-05-10",
+      "name": "[concat(deployment().name, '-pip')]",
+      "type": "Microsoft.Resources/deployments",
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[concat(variables('uri'),'/publicIP/publicIP.json')]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "name": {
+            "value": "[reference(concat(deployment().name, '-gov')).outputs.defaultConvention.value]",
+            "environment": "[parameters('environment')]",
+            "contactEmail": "[parameters('contactEmail')]"
+          }
+        }
+      },
+      "dependsOn": [
+        "[concat(deployment().name, '-gov')]"
+      ]
+    },
+    {
+      "apiVersion": "2017-05-10",
+      "name": "[concat(deployment().name, '-lrs')]",
+      "type": "Microsoft.Resources/deployments",
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[concat(variables('uri'),'/storageAccount/storageAccount.json')]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "name": {
+            "value": "[reference(concat(deployment().name, '-gov')).outputs.storageConvention.value]"
+          },
+          "environment": {
+            "value": "[parameters('environment')]"
+          },
+          "contactEmail": {
+            "value": "[parameters('contactEmail')]"
+          }
+        }
+      },
+      "dependsOn": [
+        "[concat(deployment().name, '-gov')]"
+      ]
+    }
+  ],
+  "outputs": {
+    "defaultConvention": {
+      "type": "string",
+      "value": "[reference(concat(deployment().name, '-gov')).outputs.defaultConvention.value]"
+    },
+    "storageConvention": {
+      "type": "string",
+      "value": "[reference(concat(deployment().name, '-gov')).outputs.storageConvention.value]"
+    }
+  }
+}
