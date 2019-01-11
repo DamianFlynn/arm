@@ -17,7 +17,7 @@
   "resources": [
     {
       "apiVersion": "2017-05-10",
-      "name": "bm-namingconvention-gov",
+      "name": "[concat(deployment().name, '-gov')]",
       "type": "Microsoft.Resources/deployments",
       "properties": {
         "mode": "Incremental",
@@ -36,11 +36,11 @@
   "outputs": {
     "defaultConvention": {
       "type": "string",
-      "value": "[reference('bm-namingconvention-gov').outputs.defaultConvention.value]"
+      "value": "[reference(concat(deployment().name, '-gov')).outputs.defaultConvention.value]"
     },
     "storageConvention": {
       "type": "string",
-      "value": "[reference('bm-namingconvention-gov').outputs.storageConvention.value]"
+      "value": "[reference(concat(deployment().name, '-gov')).outputs.storageConvention.value]"
     }
   }
 }

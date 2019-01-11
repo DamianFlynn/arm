@@ -45,12 +45,12 @@
         },
         "parameters": {
           "name": {
-            "value": "[reference('bm-namingconvention-gov').outputs.defaultConvention.value]"
+            "value": "[reference(concat(deployment().name, '-gov')).outputs.defaultConvention.value]"
           }
         }
       },
       "dependsOn": [
-        "bm-namingconvention-gov"
+        "[concat(deployment().name, '-gov')]"
       ]
     }
 
@@ -58,11 +58,11 @@
   "outputs": {
     "defaultConvention": {
       "type": "string",
-      "value": "[reference('bm-namingconvention-gov').outputs.defaultConvention.value]"
+      "value": "[reference(concat(deployment().name, '-gov')).outputs.defaultConvention.value]"
     },
     "storageConvention": {
       "type": "string",
-      "value": "[reference('bm-namingconvention-gov').outputs.storageConvention.value]"
+      "value": "[reference(concat(deployment().name, '-gov')).outputs.storageConvention.value]"
     }
   }
 }
