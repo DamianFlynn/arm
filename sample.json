@@ -10,7 +10,9 @@
       }
     }
   },
-  "variables": {},
+  "variables": {
+    "uri" : "[uri(deployment().properties.templateLink.uri,'DamianFlynn/ARM')]"
+  },
   "functions": [],
   "resources": [
     {
@@ -20,7 +22,7 @@
       "properties": {
         "mode": "Incremental",
         "templateLink": {
-          "uri": "[uri(deployment().properties.templateLink.uri, '/namingConvention/namingConvention.json')]",
+          "uri": "[concat(variables('uri'),'/namingConvention/namingConvention.json')]",
           "contentVersion": "1.0.0.0"
         },
         "parameters": {
