@@ -28,7 +28,7 @@
     }
   },
   "variables": {
-    "uri" : "https://raw.githubusercontent.com/DamianFlynn/arm/master"
+    "uri": "https://raw.githubusercontent.com/DamianFlynn/arm/master"
   },
   "functions": [],
   "resources": [
@@ -49,7 +49,6 @@
         }
       }
     },
-
     {
       "apiVersion": "2017-05-10",
       "name": "[concat(deployment().name, '-pip')]",
@@ -62,9 +61,13 @@
         },
         "parameters": {
           "name": {
-            "value": "[reference(concat(deployment().name, '-gov')).outputs.defaultConvention.value]",
-            "environment":"[parameters('environment')]",
-            "contactEmail":"[parameters('contactEmail')]"
+            "value": "[reference(concat(deployment().name, '-gov')).outputs.defaultConvention.value]"
+          },
+          "environment": {
+            "value": "[parameters('environment')]"
+          },
+          "contactEmail": {
+            "value": "[parameters('contactEmail')]"
           }
         }
       },
@@ -72,7 +75,6 @@
         "[concat(deployment().name, '-gov')]"
       ]
     }
-
   ],
   "outputs": {
     "defaultConvention": {
