@@ -56,11 +56,6 @@
       "name": "[concat(variables('nsgName'),'/', parameters('networkSecurityGroupsSettings').securityRules[copyIndex()].name)]",
       "apiVersion": "2016-09-01",
       "location": "[parameters('location')]",
-      "tags": {
-        "Contact": "[parameters('contactEmail')]",
-        "Project": "[parameters('name')]",
-        "Environment": "[parameters('environment')]"
-      },
       "properties": {
         "description": "[parameters('networkSecurityGroupsSettings').securityRules[copyIndex()].description]",
         "priority": "[parameters('networkSecurityGroupsSettings').securityRules[copyIndex()].priority]",
