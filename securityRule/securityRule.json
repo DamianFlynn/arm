@@ -1,0 +1,71 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "name": {
+      "type": "string",
+      "metadata": {
+        "description": "Name for the resouce in template format, eg bm-demo-{resourceType}-Test-ne"
+      }
+    },
+    "networkSecurityGroupsSettings": {
+      "type": "object"
+    },
+    "location": {
+      "type": "string",
+      "defaultValue": "[resourceGroup().location]"
+    },
+    "contactEmail": {
+      "type": "string",
+      "defaultValue": "damian.flynn@innofactor.com"
+    },
+    "environment": {
+      "type": "string",
+      "allowedValues": [
+        "Prod",
+        "Test",
+        "Dev",
+        "POC"
+      ],
+      "defaultValue": "Dev",
+      "metadata": {
+        "description": "Type of environment"
+      }
+    }
+  },
+  "variables": {
+    "nsgName": "[replace(parameters('name'),'{resourceType}','nsg')]"
+  },
+  "resources": [
+    {
+      "type": "Microsoft.Network/networkSecurityGroups/securityRules",
+      "name": "[concat(variables('nsgName'),'/', parameters('networkSecurityGroupsSettings').securityRules[copyIndex()].name)]",
+      "apiVersion": "2016-09-01",
+      "location": "[parameters('location')]",
+      "tags": {
+        "Contact": "[parameters('contactEmail')]",
+        "Project": "[parameters('name')]",
+        "Environment": "[parameters('environment')]"
+      },
+      "properties": {
+        "description": "[parameters('networkSecurityGroupsSettings').securityRules[copyIndex()].description]",
+        "priority": "[parameters('networkSecurityGroupsSettings').securityRules[copyIndex()].priority]",
+        "protocol": "[parameters('networkSecurityGroupsSettings').securityRules[copyIndex()].protocol]",
+        "sourcePortRange": "[parameters('networkSecurityGroupsSettings').securityRules[copyIndex()].sourcePortRange]",
+        "destinationPortRange": "[parameters('networkSecurityGroupsSettings').securityRules[copyIndex()].destinationPortRange]",
+        "sourceAddressPrefix": "[parameters('networkSecurityGroupsSettings').securityRules[copyIndex()].sourceAddressPrefix]",
+        "destinationAddressPrefix": "[parameters('networkSecurityGroupsSettings').securityRules[copyIndex()].destinationAddressPrefix]",
+        "access": "[parameters('networkSecurityGroupsSettings').securityRules[copyIndex()].access]",
+        "direction": "[parameters('networkSecurityGroupsSettings').securityRules[copyIndex()].direction]"
+      },
+      "dependsOn": [],
+      "copy": {
+        "name": "iterator",
+        "count": "[length(parameters('networkSecurityGroupsSettings').securityRules)]"
+      }
+    }
+  ],
+  "outputs": {
+
+  }
+}
