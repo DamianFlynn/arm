@@ -38,6 +38,20 @@
   },
   "resources": [
     {
+      "type": "Microsoft.Network/networkSecurityGroups",
+      "name": "variables('nsgName')",
+      "apiVersion": "2018-10-01",
+      "location": "[parameters('location')]",
+      "tags": {
+        "Contact": "[parameters('contactEmail')]",
+        "Project": "[parameters('name')]",
+        "Environment": "[parameters('environment')]"
+      },
+      "properties": {
+        "securityRules": []
+      }
+    },
+    {
       "type": "Microsoft.Network/networkSecurityGroups/securityRules",
       "name": "[concat(variables('nsgName'),'/', parameters('networkSecurityGroupsSettings').securityRules[copyIndex()].name)]",
       "apiVersion": "2016-09-01",
@@ -65,7 +79,5 @@
       }
     }
   ],
-  "outputs": {
-
-  }
+  "outputs": {}
 }
