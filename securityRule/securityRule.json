@@ -39,7 +39,7 @@
   "resources": [
     {
       "type": "Microsoft.Network/networkSecurityGroups",
-      "name": "variables('nsgName')",
+      "name": "[variables('nsgName')]",
       "apiVersion": "2018-10-01",
       "location": "[parameters('location')]",
       "tags": {
