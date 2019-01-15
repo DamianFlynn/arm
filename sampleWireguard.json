@@ -75,6 +75,46 @@
         "[concat(deployment().name, '-gov')]"
       ]
     },
+
+    {
+      "apiVersion": "2017-05-10",
+      "name": "[concat(deployment().name, '-vnet')]",
+      "type": "Microsoft.Resources/deployments",
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[concat(variables('uri'),'/network/network.json')]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "name": {
+            "value": "[reference(concat(deployment().name, '-gov')).outputs.defaultConvention.value]"
+          },
+          "environment": {
+            "value": "[parameters('environment')]"
+          },
+          "contactEmail": {
+            "value": "[parameters('contactEmail')]"
+          },
+          "networkSettings": {
+            "value": {
+              "addressSpace": "10.10.0.0/16",
+              "subnets": [
+                {
+                  "name": "private",
+                  "description": "allow RDP connections",
+                  "addressPrefix": "10.10.0.0/24"
+                }
+              ]
+            }
+          }
+        }
+      },
+      "dependsOn": [
+        "[concat(deployment().name, '-gov')]"
+      ]
+    },
+
     {
       "apiVersion": "2017-05-10",
       "name": "[concat(deployment().name, '-nsg')]",
