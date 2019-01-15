@@ -8,8 +8,14 @@
         "description": "Name for the resouce in template format, eg bm-demo-{resourceType}-Test-ne"
       }
     },
-    "networkSettings": {
-      "type": "object"
+    "publicIpAddressId": {
+      "type": "string"
+    },
+    "nsgId": {
+      "type": "string"
+    },
+    "subnetId": {
+      "type": "string"
     },
     "location": {
       "type": "string",
@@ -34,13 +40,13 @@
     }
   },
   "variables": {
-    "vnetName": "[replace(parameters('name'),'{resourceType}','vnet')]"
+    "nicName": "[replace(parameters('name'),'{resourceType}','nic')]"
   },
   "resources": [
     
     {
-      "type": "Microsoft.Network/virtualNetworks",
-      "name": "[variables('vnetName')]",
+      "type": "Microsoft.Network/networkInterfaces",
+      "name": "[variables('nicName')]",
       "apiVersion": "2018-10-01",
       "location": "[parameters('location')]",
       "scale": null,
@@ -50,40 +56,40 @@
         "Environment": "[parameters('environment')]"
       },
       "properties": {
-        "addressSpace": {
-          "addressPrefixes": [
-            "[parameters('networkSettings').addressSpace]"
-          ]
+        "primary": true,
+        "enableAcceleratedNetworking": true,
+        "privateIPAddressVersion": "IPv4",
+        "privateIPAllocationMethod": "Dynamic",
+        "enableIPForwarding": false,
+
+        "publicIPAddress": {
+          "id": "[parameters('publicIPAddressId')]"
         },
-        "virtualNetworkPeerings": [],
-        "enableDdosProtection": false,
-        "enableVmProtection": false
+
+        "subnet": {
+          "id": "[parameters('subnetId')]"
+        },
+
+        "networkSecurityGroup": {
+          "id": "[parameters('nsgId')]"
+        },
+
+        "dnsSettings": {
+          "dnsServers": [],
+          "appliedDnsServers": [],
+          "internalDomainNameSuffix": "xxznn1ihkevedhrpt0crvu5w3a.xx.internal.cloudapp.net"
+        }
+
       },
       "dependsOn": []
-    },
-
-    {
-      "type": "Microsoft.Network/virtualNetworks/subnets",
-      "name": "[concat(variables('vnetName'),'/', parameters('networkSettings').subnets[copyIndex()].name)]",
-      "apiVersion": "2018-10-01",
-      "scale": null,
-      "location": "[parameters('location')]",
-      "properties": {
-        "addressPrefix": "[parameters('networkSettings').subnets[copyIndex()].addressPrefix]"
-      },
-      "dependsOn": [
-        "[resourceId('Microsoft.Network/virtualNetworks', variables('vnetName'))]"
-      ],
-      "copy": {
-        "name": "iterator",
-        "count": "[length(parameters('networkSettings').subnets)]"
-      }
     }
+
+    
   ],
   "outputs": {
     "resourceID": {
       "type": "string",
-      "value": "[resourceId('Microsoft.Network/virtualNetworks', variables('vnetName'))]"
+      "value": "[resourceId('Microsoft.Network/networkInterfaces', variables('nicName'))]"
     }
   }
 }

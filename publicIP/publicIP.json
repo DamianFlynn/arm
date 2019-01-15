@@ -53,7 +53,7 @@
     }
   ],
   "outputs": {
-    "resourceID": {
+    "resourceId": {
       "type": "string",
       "value": "[resourceId('Microsoft.Network/publicIPAddresses', variables('pipName'))]"
     }, 

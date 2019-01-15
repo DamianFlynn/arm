@@ -79,5 +79,10 @@
     }
 
   ],
-  "outputs": {}
+  "outputs": {
+    "resourceId": {
+      "type": "string",
+      "value": "[resourceId('Microsoft.Network/networkSecurityGroups', variables('nsgName'))]"
+    }
+  }
 }

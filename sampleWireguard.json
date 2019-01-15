@@ -247,7 +247,47 @@
       "dependsOn": [
         "[concat(deployment().name, '-gov')]"
       ]
+    },
+
+    {
+      "apiVersion": "2017-05-10",
+      "name": "[concat(deployment().name, '-nic')]",
+      "type": "Microsoft.Resources/deployments",
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[concat(variables('uri'),'/networkInterface/networkInterface.json')]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "name": {
+            "value": "[reference(concat(deployment().name, '-gov')).outputs.storageConvention.value]"
+          },
+          "publicIpAddressId": {
+            "value": "[reference(concat(deployment().name, '-pip')).outputs.resourceId.value]"
+          },
+          "nsgId": {
+            "value": "[reference(concat(deployment().name, '-nsg')).outputs.resourceId.value]"
+          },
+          "subnetId": {
+            "value": "[reference(concat(deployment().name, '-nsg')).outputs.resourceId.value]"
+          },
+          "environment": {
+            "value": "[parameters('environment')]"
+          },
+          "contactEmail": {
+            "value": "[parameters('contactEmail')]"
+          }
+        }
+      },
+      "dependsOn": [
+        "[concat(deployment().name, '-gov')]",
+        "[concat(deployment().name, '-pip')]"
+      ]
     }
+
+    
+
   ],
   "outputs": {
     "defaultConvention": {

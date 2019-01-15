@@ -1,0 +1,116 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "name": {
+      "type": "string",
+      "metadata": {
+        "description": "Name for the resouce in template format, eg bm-demo-{resourceType}-Test-ne"
+      }
+    },
+    "vmSettings": {
+      "type": "object"
+    },
+    "location": {
+      "type": "string",
+      "defaultValue": "[resourceGroup().location]"
+    },
+    "contactEmail": {
+      "type": "string",
+      "defaultValue": "damian.flynn@innofactor.com"
+    },
+    "environment": {
+      "type": "string",
+      "allowedValues": [
+        "Prod",
+        "Test",
+        "Dev",
+        "POC"
+      ],
+      "defaultValue": "Dev",
+      "metadata": {
+        "description": "Type of environment"
+      }
+    }
+  },
+  "variables": {
+    "vmName" : "[replace(parameters('name'),'{resourceType}','vm')]"
+  },
+  "resources": [
+    {
+      "type": "Microsoft.Compute/virtualMachines",
+      "name": "[variables('vmName')]",
+      "apiVersion": "2017-03-30",
+      "location": "[parameters('location')]",
+      "dependsOn": [ ],
+      "properties": {
+        "hardwareProfile": {
+          "vmSize": "[parameters('vmSettings').vm_size]"
+        },
+        "osProfile": {
+          "computerName": "[variables('vmName')]",
+          "adminUsername": "[parameters('vmSettings').os_profile.admin_username]",
+          "adminPassword": "[parameters('vmSettings').os_profile.admin_password]"
+        },
+        "storageProfile": {
+          "imageReference": {
+            "publisher": "[parameters('vmSettings').storage_image_reference.publisher]",
+            "offer": "[parameters('vmSettings').storage_image_reference.offer]",
+            "sku": "[parameters('vmSettings').storage_image_reference.sku]",
+            "version": "[parameters('vmSettings').storage_image_reference.version]"
+          },
+          "osDisk": {
+            "createOption": "FromImage"
+          },
+          "dataDisks": [
+            {
+              "diskSizeGB": 1023,
+              "lun": 0,
+              "createOption": "Empty"
+            }
+          ]
+        },
+        "networkProfile": {
+          "networkInterfaces": [
+            {
+              "id": "[resourceId('Microsoft.Network/networkInterfaces',variables('nicName'))]"
+            }
+          ]
+        },
+        "diagnosticsProfile": {
+          "bootDiagnostics": {
+            "enabled": true,
+            "storageUri": "[concat(reference(concat('Microsoft.Storage/storageAccounts/', variables('storageAccountName')), '2016-01-01').primaryEndpoints.blob)]"
+          }
+        }
+      }
+    },
+    {
+      "type": "Microsoft.Network/publicIPAddresses",
+      "name": "[variables('pipName')]",
+      "apiVersion": "2017-06-01",
+      "location": "[parameters('location')]",
+      "tags": {
+        "Contact": "[parameters('contactEmail')]",
+        "Project": "[parameters('name')]",
+        "Environment": "[parameters('environment')]"
+      },
+      "properties": {
+        "publicIPAddressVersion": "IPv4",
+        "publicIPAllocationMethod": "Dynamic",
+        "idleTimeoutInMinutes": 4
+      },
+      "dependsOn": []
+    }
+  ],
+  "outputs": {
+    "resourceID": {
+      "type": "string",
+      "value": "[resourceId('Microsoft.Network/publicIPAddresses', variables('pipName'))]"
+    }, 
+    "publicIP": {
+      "type": "string",
+      "value": "reference(variables('pipName')).IpAddress"
+    }  
+  }
+}
