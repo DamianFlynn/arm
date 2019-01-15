@@ -37,6 +37,7 @@
     "vnetName": "[replace(parameters('name'),'{resourceType}','vnet')]"
   },
   "resources": [
+    
     {
       "type": "Microsoft.Network/virtualNetworks",
       "name": "[variables('vnetName')]",
@@ -68,7 +69,6 @@
       "scale": null,
       "location": "[parameters('location')]",
       "properties": {
-        "description": "[parameters('networkSettings').subnets[copyIndex()].description]",
         "addressPrefix": "[parameters('networkSettings').subnets[copyIndex()].addressPrefix]"
       },
       "dependsOn": [

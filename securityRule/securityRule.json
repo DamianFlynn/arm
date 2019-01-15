@@ -37,6 +37,7 @@
     "nsgName": "[replace(parameters('name'),'{resourceType}','nsg')]"
   },
   "resources": [
+
     {
       "type": "Microsoft.Network/networkSecurityGroups",
       "name": "[variables('nsgName')]",
@@ -51,6 +52,7 @@
         "securityRules": []
       }
     },
+
     {
       "type": "Microsoft.Network/networkSecurityGroups/securityRules",
       "name": "[concat(variables('nsgName'),'/', parameters('networkSecurityGroupsSettings').securityRules[copyIndex()].name)]",
@@ -67,12 +69,15 @@
         "access": "[parameters('networkSecurityGroupsSettings').securityRules[copyIndex()].access]",
         "direction": "[parameters('networkSecurityGroupsSettings').securityRules[copyIndex()].direction]"
       },
-      "dependsOn": [],
+      "dependsOn": [
+        "[resourceId('Microsoft.Network/networkSecurityGroups', variables('nsgName'))]"
+      ],
       "copy": {
         "name": "iterator",
         "count": "[length(parameters('networkSecurityGroupsSettings').securityRules)]"
       }
     }
+
   ],
   "outputs": {}
 }
