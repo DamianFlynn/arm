@@ -1,0 +1,223 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "projectName": {
+      "type": "string",
+      "minLength": 2,
+      "metadata": {
+        "description": "Short description of the project"
+      }
+    },
+    "contactEmail": {
+      "type": "string",
+      "defaultValue": "damian.flynn@innofactor.com"
+    },
+    "environment": {
+      "type": "string",
+      "allowedValues": [
+        "Prod",
+        "Test",
+        "Dev",
+        "POC"
+      ],
+      "defaultValue": "Dev",
+      "metadata": {
+        "description": "Type of environment"
+      }
+    }
+  },
+  "variables": {
+    "uri": "https://raw.githubusercontent.com/DamianFlynn/arm/master"
+  },
+  "functions": [],
+  "resources": [
+    {
+      "apiVersion": "2017-05-10",
+      "name": "[concat(deployment().name, '-gov')]",
+      "type": "Microsoft.Resources/deployments",
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[concat(variables('uri'),'/namingConvention/namingConvention.json')]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "projectName": {
+            "value": "[parameters('projectName')]"
+          }
+        }
+      }
+    },
+    {
+      "apiVersion": "2017-05-10",
+      "name": "[concat(deployment().name, '-pip')]",
+      "type": "Microsoft.Resources/deployments",
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[concat(variables('uri'),'/publicIP/publicIP.json')]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "name": {
+            "value": "[reference(concat(deployment().name, '-gov')).outputs.defaultConvention.value]"
+          },
+          "environment": {
+            "value": "[parameters('environment')]"
+          },
+          "contactEmail": {
+            "value": "[parameters('contactEmail')]"
+          }
+        }
+      },
+      "dependsOn": [
+        "[concat(deployment().name, '-gov')]"
+      ]
+    },
+    {
+      "apiVersion": "2017-05-10",
+      "name": "[concat(deployment().name, '-nsg')]",
+      "type": "Microsoft.Resources/deployments",
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[concat(variables('uri'),'/securityRule/securityRule.json')]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "name": {
+            "value": "[reference(concat(deployment().name, '-gov')).outputs.defaultConvention.value]"
+          },
+          "environment": {
+            "value": "[parameters('environment')]"
+          },
+          "contactEmail": {
+            "value": "[parameters('contactEmail')]"
+          },
+          "networkSecurityGroupsSettings": {
+            "value": {
+              "securityRules": [
+                {
+                  "name": "RDPAllow",
+                  "description": "allow RDP connections",
+                  "direction": "Inbound",
+                  "priority": 100,
+                  "sourceAddressPrefix": "*",
+                  "destinationAddressPrefix": "10.0.0.0/24",
+                  "sourcePortRange": "*",
+                  "destinationPortRange": "3389",
+                  "access": "Allow",
+                  "protocol": "Tcp"
+                },
+                {
+                  "name": "AllowNGINX",
+                  "description": "",
+                  "direction": "Inbound",
+                  "priority": 101,
+                  "sourceAddressPrefix": "*",
+                  "destinationAddressPrefix": "*",
+                  "sourcePortRange": "*",
+                  "destinationPortRange": "443",
+                  "access": "Allow",
+                  "protocol": "Tcp",
+                  "sourcePortRanges": [],
+                  "destinationPortRanges": [],
+                  "sourceAddressPrefixes": [],
+                  "destinationAddressPrefixes": []
+                },
+                {
+                  "name": "AllowSSHTCP",
+                  "description": "",
+                  "direction": "Inbound",
+                  "priority": 108,
+                  "sourceAddressPrefix": "*",
+                  "destinationAddressPrefix": "*",
+                  "sourcePortRange": "*",
+                  "destinationPortRange": "22",
+                  "access": "Allow",                 
+                  "protocol": "Tcp",
+                  "sourcePortRanges": [],
+                  "destinationPortRanges": [],
+                  "sourceAddressPrefixes": [],
+                  "destinationAddressPrefixes": []
+                },
+                {
+                  "name": "AllowWireguard",
+                  "description": "",
+                  "direction": "Inbound",
+                  "priority": 112,
+                  "sourceAddressPrefix": "*",
+                  "destinationAddressPrefix": "*",
+                  "sourcePortRange": "*",
+                  "destinationPortRange": "51820",
+                  "access": "Allow",
+                  "protocol": "Udp",
+                  "sourceAddressPrefixes": [],
+                  "destinationAddressPrefixes": [],
+                  "sourcePortRanges": [],
+                  "destinationPortRanges": []
+                },
+                {
+                  "name": "AllowHTTP",
+                  "description": "allow HTTP connections",
+                  "direction": "Inbound",
+                  "priority": 120,
+                  "sourceAddressPrefix": "*",
+                  "destinationAddressPrefix": "*",
+                  "sourcePortRange": "*",
+                  "destinationPortRange": "80",
+                  "access": "Allow",
+                  "protocol": "Tcp",
+                  "sourcePortRanges": [],
+                  "destinationPortRanges": [],
+                  "sourceAddressPrefixes": [],
+                  "destinationAddressPrefixes": []
+                }
+              ]
+            }
+          }
+        }
+      },
+      "dependsOn": [
+        "[concat(deployment().name, '-gov')]"
+      ]
+    },
+    {
+      "apiVersion": "2017-05-10",
+      "name": "[concat(deployment().name, '-lrs')]",
+      "type": "Microsoft.Resources/deployments",
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[concat(variables('uri'),'/storageAccount/storageAccount.json')]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "name": {
+            "value": "[reference(concat(deployment().name, '-gov')).outputs.storageConvention.value]"
+          },
+          "environment": {
+            "value": "[parameters('environment')]"
+          },
+          "contactEmail": {
+            "value": "[parameters('contactEmail')]"
+          }
+        }
+      },
+      "dependsOn": [
+        "[concat(deployment().name, '-gov')]"
+      ]
+    }
+  ],
+  "outputs": {
+    "defaultConvention": {
+      "type": "string",
+      "value": "[reference(concat(deployment().name, '-gov')).outputs.defaultConvention.value]"
+    },
+    "storageConvention": {
+      "type": "string",
+      "value": "[reference(concat(deployment().name, '-gov')).outputs.storageConvention.value]"
+    }
+  }
+}
