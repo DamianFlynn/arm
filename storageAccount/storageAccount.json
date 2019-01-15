@@ -40,19 +40,40 @@
     }
   },
   "variables": {
-    "storageName" : "[replace(parameters('name'),'{resourcetype}','lrs')]"
+    "storageName": "[replace(parameters('name'),'{resourcetype}','lrs')]"
   },
-  
   "resources": [
     {
       "type": "Microsoft.Storage/storageAccounts",
       "name": "[variables('storageName')]",
-      "apiVersion": "2015-06-15",
+      "apiVersion": "2018-07-01",
+      "kind": "Storage",
+      "scale": null,
       "location": "[parameters('location')]",
-      "properties": {
-        "accountType": "[parameters('storageAccountType')]"
+      "sku": {
+        "name": "[parameters('storageAccountType')]",
+        "tier": "Standard"
       },
-
+      "properties": {
+        "networkAcls": {
+          "bypass": "AzureServices",
+          "virtualNetworkRules": [],
+          "ipRules": [],
+          "defaultAction": "Allow"
+        },
+        "supportsHttpsTrafficOnly": false,
+        "encryption": {
+          "services": {
+            "file": {
+              "enabled": true
+            },
+            "blob": {
+              "enabled": true
+            }
+          },
+          "keySource": "Microsoft.Storage"
+        }
+      },
       "tags": {
         "Contact": "[parameters('contactEmail')]",
         "Project": "[parameters('name')]",
