@@ -34,7 +34,7 @@
     }
   },
   "variables": {
-    "vmName" : "[replace(parameters('name'),'{resourceType}','vm')]"
+    "vmName": "[replace(parameters('name'),'{resourceType}','vm')]"
   },
   "resources": [
     {
@@ -43,19 +43,16 @@
       "apiVersion": "2018-06-01",
       "location": "[parameters('location')]",
       "scale": null,
-      "dependsOn": [ ],
+      "dependsOn": [],
       "properties": {
-
         "hardwareProfile": {
           "vmSize": "[parameters('vmSettings').vm_size]"
         },
-
         "osProfile": {
           "computerName": "[variables('vmName')]",
           "adminUsername": "[parameters('vmSettings').os_profile.admin_username]",
           "adminPassword": "[parameters('vmSettings').os_profile.admin_password]"
         },
-
         "storageProfile": {
           "imageReference": {
             "publisher": "[parameters('vmSettings').storage_image_reference.publisher]",
@@ -70,25 +67,21 @@
             "caching": "ReadOnly",
             "diskSizeGB": 30
           },
-
           "dataDisks": []
         },
-
         "networkProfile": {
           "networkInterfaces": [
             {
-              "id": "[parameters('vmSettings').network_interface_ids]"
+              "id": "[parameters('vmSettings').network_interface_id]"
             }
           ]
         },
-
         "diagnosticsProfile": {
           "bootDiagnostics": {
             "enabled": true,
             "storageUri": "[concat(reference(parameters('vmSettings').diagStorage, '2016-01-01').primaryEndpoints.blob)]"
           }
         }
-        
       }
     }
   ],
@@ -96,6 +89,6 @@
     "resourceID": {
       "type": "string",
       "value": "[resourceId('Microsoft.Compute/virtualMachines', variables('vmName'))]"
-    }  
+    }
   }
 }

@@ -311,10 +311,10 @@
           },
           "vmSettings": {
             "value": {
-              "network_interface_ids" : ["[reference(concat(deployment().name, '-nic')).outputs.resourceID.value]"],
+              "network_interface_id" : "[reference(concat(deployment().name, '-nic')).outputs.resourceID.value]",
               "diagStorage":"[reference(concat(deployment().name, '-lrs')).outputs.resourceID.value]",
               "vm_size": "Standard_B1s",
-              
+
               "storage_image_reference": {
                 "publisher": "Canonical",
                 "offer": "UbuntuServer",
