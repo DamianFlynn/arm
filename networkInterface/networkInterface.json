@@ -45,7 +45,6 @@
     "subnetName": "[substring(parameters('subnetName'),indexOf(parameters('subnetName'),'/'))]"
   },
   "resources": [
-    
     {
       "type": "Microsoft.Network/networkInterfaces",
       "name": "[variables('nicName')]",
@@ -58,35 +57,34 @@
         "Environment": "[parameters('environment')]"
       },
       "properties": {
-        "primary": true,
-        "enableAcceleratedNetworking": true,
-        "privateIPAddressVersion": "IPv4",
-        "privateIPAllocationMethod": "Dynamic",
-        "enableIPForwarding": false,
-
-        "publicIPAddress": {
-          "id": "[parameters('publicIPAddressId')]"
+        "ipConfigurations": [
+          {
+            "name": "ipconfig1",
+            "properties": {
+              "primary": true,
+              "privateIPAddressVersion": "IPv4",
+              "privateIPAllocationMethod": "Dynamic",
+              "publicIPAddress": {
+                "id": "[parameters('publicIPAddressId')]"
+              },
+              "subnet": {
+                "id": "[concat(resourceId('Microsoft.Network/virtualNetworks',variables('virtualNetworkName')),'/subnets/',variables('subnetName'))]"
+              }
+            }
+          }
+        ],
+        "dnsSettings": {
+          "dnsServers": [],
+          "appliedDnsServers": []
         },
-
-        "subnet": {
-          "id": "[concat(resourceId('Microsoft.Network/virtualNetworks',variables('virtualNetworkName')),'/subnets/',variables('subnetName'))]"
-        },
-
         "networkSecurityGroup": {
           "id": "[parameters('nsgId')]"
         },
-
-        "dnsSettings": {
-          "dnsServers": [],
-          "appliedDnsServers": [],
-          "internalDomainNameSuffix": "xxznn1ihkevedhrpt0crvu5w3a.xx.internal.cloudapp.net"
-        }
-
+        "enableIPForwarding": false,
+        "enableAcceleratedNetworking": true
       },
       "dependsOn": []
     }
-
-    
   ],
   "outputs": {
     "resourceID": {
