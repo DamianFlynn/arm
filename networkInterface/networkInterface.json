@@ -42,7 +42,8 @@
   "variables": {
     "nicName": "[replace(parameters('name'),'{resourceType}','nic')]",
     "virtualNetworkName": "[substring(parameters('subnetName'),0,indexOf(parameters('subnetName'),'/'))]",
-    "subnetName": "[substring(parameters('subnetName'),indexOf(parameters('subnetName'),'/'))]"
+    "subnetName": "[substring(parameters('subnetName'),indexOf(parameters('subnetName'),'/'))]",
+    "subnetRef": "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('virtualNetworkName'), variables('subnetName'))]"
   },
   "resources": [
     {
@@ -68,7 +69,7 @@
                 "id": "[parameters('publicIPAddressId')]"
               },
               "subnet": {
-                "id": "[concat(resourceId('Microsoft.Network/virtualNetworks',variables('virtualNetworkName')),'/subnets/',variables('subnetName'))]"
+                "id": "[variables('subnetRef')]"
               }
             }
           }
