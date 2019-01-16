@@ -73,14 +73,14 @@
         "networkProfile": {
           "networkInterfaces": [
             {
-              "id": "[resourceId('Microsoft.Network/networkInterfaces',variables('nicName'))]"
+              "id": "[parameters('vmSettings').network_interface_ids]"
             }
           ]
         },
         "diagnosticsProfile": {
           "bootDiagnostics": {
             "enabled": true,
-            "storageUri": "[concat(reference(concat('Microsoft.Storage/storageAccounts/', variables('storageAccountName')), '2016-01-01').primaryEndpoints.blob)]"
+            "storageUri": "[concat(reference(parameters('vmSettings').diagStorage, '2016-01-01').primaryEndpoints.blob)]"
           }
         }
       }

@@ -86,6 +86,10 @@
     "storageAccountInfo": {
       "value": "[reference(concat('Microsoft.Storage/storageAccounts/', variables('storageName')),providers('Microsoft.Storage', 'storageAccounts').apiVersions[0])]",
       "type": "object"
+    },
+    "resourceID": {
+      "type": "string",
+      "value": "[resourceId('Microsoft.Storage/storageAccounts/', variables('storageName'))]"
     }
   }
 }

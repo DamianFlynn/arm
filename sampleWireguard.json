@@ -287,8 +287,67 @@
         "[concat(deployment().name, '-gov')]",
         "[concat(deployment().name, '-pip')]"
       ]
-    }
+    },
 
+    {
+      "apiVersion": "2017-05-10",
+      "name": "[concat(deployment().name, '-vm')]",
+      "type": "Microsoft.Resources/deployments",
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[concat(variables('uri'),'/virtualMachine/linuxVM.json')]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "name": {
+            "value": "[reference(concat(deployment().name, '-gov')).outputs.defaultConvention.value]"
+          },
+          "environment": {
+            "value": "[parameters('environment')]"
+          },
+          "contactEmail": {
+            "value": "[parameters('contactEmail')]"
+          },
+          "vmSettings": {
+            "value": {
+              "network_interface_ids" : ["[reference(concat(deployment().name, '-nic')).outputs.resourceID.value]"],
+              "diagStorage":"[reference(concat(deployment().name, '-lrs')).outputs.resourceID.value]",
+              "vm_size": "Standard_DS1_v2",
+            
+              "storage_image_reference": {
+                "publisher": "Canonical",
+                "offer": "UbuntuServer",
+                "sku": "16.04-LTS",
+                "version": "latest"
+              },
+
+              "storage_os_disk": {
+                "name":              "myosdisk1",
+                "caching":           "ReadWrite",
+                "create_option":     "FromImage",
+                "managed_disk_type": "Standard_LRS"
+              },
+
+              "os_profile": {
+                "computer_name":   "hostname",
+                "admin_username":  "testadmin",
+                "admin_password":  "Password1234!"
+              },
+              "os_profile_linux_config": {
+                "disable_password_authentication": "false"
+              }
+            }
+          }
+        }
+      },
+      "dependsOn": [
+        "[concat(deployment().name, '-gov')]",
+        "[concat(deployment().name, '-lrs')]",
+        "[concat(deployment().name, '-nic')]"
+      ]
+    }
+  
     
 
   ],
