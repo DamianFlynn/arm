@@ -17,6 +17,9 @@
     "subnetName": {
       "type": "string"
     },
+    "virtualNetworkName": {
+      "type": "string"
+    },
     "location": {
       "type": "string",
       "defaultValue": "[resourceGroup().location]"
@@ -41,9 +44,7 @@
   },
   "variables": {
     "nicName": "[replace(parameters('name'),'{resourceType}','nic')]",
-    "virtualNetworkName": "[substring(parameters('subnetName'),0,indexOf(parameters('subnetName'),'/'))]",
-    "subnetName": "[substring(parameters('subnetName'),indexOf(parameters('subnetName'),'/'))]",
-    "subnetRef": "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('virtualNetworkName'), variables('subnetName'))]"
+    "subnetRef": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworkName'), parameters('subnetName'))]"
   },
   "resources": [
     {

@@ -269,8 +269,11 @@
           "nsgId": {
             "value": "[reference(concat(deployment().name, '-nsg')).outputs.resourceId.value]"
           },
+          "virtualNetworkName": {
+            "value": "[reference(concat(deployment().name, '-vnet')).outputs.resourceName.value]"
+          },
           "subnetName": {
-            "value": "[concat(reference(concat(deployment().name, '-vnet')).outputs.resourceName.value,'/private')]"
+            "value": "private"
           },
           "environment": {
             "value": "[parameters('environment')]"
