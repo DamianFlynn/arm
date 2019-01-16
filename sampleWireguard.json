@@ -261,7 +261,7 @@
         },
         "parameters": {
           "name": {
-            "value": "[reference(concat(deployment().name, '-gov')).outputs.storageConvention.value]"
+            "value": "[reference(concat(deployment().name, '-gov')).outputs.defaultConvention.value]"
           },
           "publicIpAddressId": {
             "value": "[reference(concat(deployment().name, '-pip')).outputs.resourceId.value]"
