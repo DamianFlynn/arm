@@ -87,7 +87,7 @@
     },
     "resourceName": {
       "type": "string",
-      "value": "[concat('Microsoft.Network/virtualNetworks', variables('vnetName'))]"
+      "value": "[variables('vnetName')]"
     }
   }
 }

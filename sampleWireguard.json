@@ -270,7 +270,7 @@
             "value": "[reference(concat(deployment().name, '-nsg')).outputs.resourceId.value]"
           },
           "subnetName": {
-            "value": "[concat(reference(concat(deployment().name, '-vnet')).outputs.resourceName.value,'/private')]"
+            "value": "[concat(reference(concat(deployment().name, '-vnet')).outputs.resourceId.value,'/subnets/','private')]"
           },
           "environment": {
             "value": "[parameters('environment')]"
