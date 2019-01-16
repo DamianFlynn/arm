@@ -14,7 +14,7 @@
     "nsgId": {
       "type": "string"
     },
-    "subnetId": {
+    "subnetName": {
       "type": "string"
     },
     "location": {
@@ -40,7 +40,9 @@
     }
   },
   "variables": {
-    "nicName": "[replace(parameters('name'),'{resourceType}','nic')]"
+    "nicName": "[replace(parameters('name'),'{resourceType}','nic')]",
+    "virtualNetworkName": "[substring(parameters('subnetName'),0,indexOf(parameters('subnetName'),'/'))]",
+    "subnetName": "[substring(parameters('subnetName'),indexOf(parameters('subnetName'),'/'))]"
   },
   "resources": [
     
@@ -67,7 +69,7 @@
         },
 
         "subnet": {
-          "id": "[parameters('subnetId')]"
+          "id": "[concat(resourceId('Microsoft.Network/virtualNetworks',variables('virtualNetworkName')),'/subnets/',variables('subnetName'))]"
         },
 
         "networkSecurityGroup": {
