@@ -37,7 +37,7 @@
       "name": "[concat(deployment().name, '-gov')]",
       "type": "Microsoft.Resources/deployments",
       "properties": {
-        "mode": "complete",
+        "mode": "Incremental",
         "templateLink": {
           "uri": "[concat(variables('uri'),'/modules/governance/governance.naming/azuredeploy.json')]",
           "contentVersion": "1.0.0.0"
@@ -54,7 +54,7 @@
       "name": "[concat(deployment().name, '-pip')]",
       "type": "Microsoft.Resources/deployments",
       "properties": {
-        "mode": "complete",
+        "mode": "Incremental",
         "templateLink": {
           "uri": "[concat(variables('uri'),'/modules/resource/microsoft.publicIp/azuredeploy.json')]",
           "contentVersion": "1.0.0.0"
@@ -81,7 +81,7 @@
       "name": "[concat(deployment().name, '-vnet')]",
       "type": "Microsoft.Resources/deployments",
       "properties": {
-        "mode": "complete",
+        "mode": "Incremental",
         "templateLink": {
           "uri": "[concat(variables('uri'),'/modules/resource/microsoft.network/azuredeploy.json')]",
           "contentVersion": "1.0.0.0"
@@ -119,7 +119,7 @@
       "name": "[concat(deployment().name, '-nsg')]",
       "type": "Microsoft.Resources/deployments",
       "properties": {
-        "mode": "complete",
+        "mode": "Incremental",
         "templateLink": {
           "uri": "[concat(variables('uri'),'/modules/resource/microsoft.networkSecurityGroups/azuredeploy.json')]",
           "contentVersion": "1.0.0.0"
@@ -227,7 +227,7 @@
       "name": "[concat(deployment().name, '-lrs')]",
       "type": "Microsoft.Resources/deployments",
       "properties": {
-        "mode": "complete",
+        "mode": "Incremental",
         "templateLink": {
           "uri": "[concat(variables('uri'),'/modules/resource/microsoft.storage/azuredeploy.json')]",
           "contentVersion": "1.0.0.0"
@@ -254,7 +254,7 @@
       "name": "[concat(deployment().name, '-nic')]",
       "type": "Microsoft.Resources/deployments",
       "properties": {
-        "mode": "complete",
+        "mode": "Incremental",
         "templateLink": {
           "uri": "[concat(variables('uri'),'/modules/resource/microsoft.network/azuredeploy.json')]",
           "contentVersion": "1.0.0.0"
@@ -294,7 +294,7 @@
       "name": "[concat(deployment().name, '-vm')]",
       "type": "Microsoft.Resources/deployments",
       "properties": {
-        "mode": "Complete",
+        "mode": "Incremental",
         "templateLink": {
           "uri": "[concat(variables('uri'),'/modules/resource/microsoft.virtualMachines/azuredeploy.linux.json')]",
           "contentVersion": "1.0.0.0"

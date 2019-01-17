@@ -37,7 +37,7 @@
       "name": "[concat(deployment().name, '-gov')]",
       "type": "Microsoft.Resources/deployments",
       "properties": {
-        "mode": "complete",
+        "mode": "Incremental",
         "templateLink": {
           "uri": "[concat(variables('uri'),'/modules/governance/governance.naming/azuredeploy.json')]",
           "contentVersion": "1.0.0.0"
@@ -54,7 +54,7 @@
       "name": "[concat(deployment().name, '-pip')]",
       "type": "Microsoft.Resources/deployments",
       "properties": {
-        "mode": "Complete",
+        "mode": "Incremental",
         "templateLink": {
           "uri": "[concat(variables('uri'),'/modules/resource/microsoft.publicIp/azuredeploy.json')]",
           "contentVersion": "1.0.0.0"
@@ -80,7 +80,7 @@
       "name": "[concat(deployment().name, '-lrs')]",
       "type": "Microsoft.Resources/deployments",
       "properties": {
-        "mode": "Complete",
+        "mode": "Incremental",
         "templateLink": {
           "uri": "[concat(variables('uri'),'/modules/resource/microsoft.storage/azuredeploy.json')]",
           "contentVersion": "1.0.0.0"

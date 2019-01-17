@@ -54,7 +54,7 @@ az group deployment create -g BM-Demo01 --template-uri https://raw.githubusercon
     "debugSetting": null,
     "dependencies": [],
     "duration": "PT4.3722711S",
-    "mode": "complete",
+    "mode": "Incremental",
     "onErrorDeployment": null,
     "outputResources": [],
     "outputs": {
