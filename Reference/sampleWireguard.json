@@ -256,7 +256,7 @@
       "properties": {
         "mode": "Incremental",
         "templateLink": {
-          "uri": "[concat(variables('uri'),'/modules/resource/microsoft.network/azuredeploy.json')]",
+          "uri": "[concat(variables('uri'),'/modules/resource/microsoft.networkInterfaces/azuredeploy.json')]",
           "contentVersion": "1.0.0.0"
         },
         "parameters": {
