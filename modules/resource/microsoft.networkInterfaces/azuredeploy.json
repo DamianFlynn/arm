@@ -83,7 +83,7 @@
           "id": "[parameters('nsgId')]"
         },
         "enableIPForwarding": false,
-        "enableAcceleratedNetworking": true
+        "enableAcceleratedNetworking": false
       },
       "dependsOn": []
     }
