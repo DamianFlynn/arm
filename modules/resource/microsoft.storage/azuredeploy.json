@@ -14,8 +14,13 @@
       "allowedValues": [
         "Standard_LRS",
         "Standard_GRS",
-        "Standard_ZRS"
-      ]
+        "Standard_ZRS",
+        "Standard_RAGRS",
+        "Premium_LRS"
+      ],
+      "metadata": {
+        "description": "Storage Account type"
+      }
     },
     "location": {
       "type": "string",
@@ -90,6 +95,31 @@
     "resourceID": {
       "type": "string",
       "value": "[resourceId('Microsoft.Storage/storageAccounts/', variables('storageName'))]"
+    },
+    "storageName": {
+      "type": "string",
+      "value": "[variables('storageName')]"
+    },
+    "storageAccountConnectionString": {
+      "type": "string",
+      "value": "[concat('DefaultEndpointsProtocol=https;AccountName=',variables('storageName'),';AccountKey=',listKeys(variables('storageName'), '2018-02-01').keys[0].value)]"
+    },
+    "blobStorageAccountConnectionString": {
+      "type": "string",
+      "value": "[concat('BlobEndpoint=https://',variables('storageName'),'.blob.core.windows.net/;TableEndpoint=https://',variables('storageName'),'.table.core.windows.net/')]"
+    },
+    "queueStorageAccountConnectionString": {
+      "type": "string",
+      "value": "[concat('QueueEndpoint=https://',variables('storageName'),'.queue.core.windows.net/;FileEndpoint=https://',variables('storageName'),'.file.core.windows.net/')]"
+    },
+    "primaryStorageAccountKey": {
+      "type": "string",
+      "value": "[listKeys(variables('storageName'), '2018-02-01').keys[0].value]"
+    },
+    "secondaryStorageAccountKey": {
+      "type": "string",
+      "value": "[listKeys(variables('storageName'), '2018-02-01').keys[1].value]"
     }
+
   }
 }

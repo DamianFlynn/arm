@@ -21,9 +21,9 @@
       "name": "[concat(deployment().name, '-gov')]",
       "type": "Microsoft.Resources/deployments",
       "properties": {
-        "mode": "Incremental",
+        "mode": "complete",
         "templateLink": {
-          "uri": "[concat(variables('uri'),'/namingConvention/namingConvention.json')]",
+          "uri": "[concat(variables('uri'),'/modules/governance/governance.naming/azuredeploy.json')]",
           "contentVersion": "1.0.0.0"
         },
         "parameters": {

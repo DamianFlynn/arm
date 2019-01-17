@@ -37,9 +37,9 @@
       "name": "[concat(deployment().name, '-gov')]",
       "type": "Microsoft.Resources/deployments",
       "properties": {
-        "mode": "Incremental",
+        "mode": "complete",
         "templateLink": {
-          "uri": "[concat(variables('uri'),'/namingConvention/namingConvention.json')]",
+          "uri": "[concat(variables('uri'),'/modules/governance/governance.naming/azuredeploy.json')]",
           "contentVersion": "1.0.0.0"
         },
         "parameters": {
@@ -54,9 +54,9 @@
       "name": "[concat(deployment().name, '-pip')]",
       "type": "Microsoft.Resources/deployments",
       "properties": {
-        "mode": "Incremental",
+        "mode": "complete",
         "templateLink": {
-          "uri": "[concat(variables('uri'),'/publicIP/publicIP.json')]",
+          "uri": "[concat(variables('uri'),'/modules/resource/microsoft.publicIp/azuredeploy.json')]",
           "contentVersion": "1.0.0.0"
         },
         "parameters": {
@@ -81,9 +81,9 @@
       "name": "[concat(deployment().name, '-vnet')]",
       "type": "Microsoft.Resources/deployments",
       "properties": {
-        "mode": "Incremental",
+        "mode": "complete",
         "templateLink": {
-          "uri": "[concat(variables('uri'),'/network/network.json')]",
+          "uri": "[concat(variables('uri'),'/modules/resource/microsoft.network/azuredeploy.json')]",
           "contentVersion": "1.0.0.0"
         },
         "parameters": {
@@ -119,9 +119,9 @@
       "name": "[concat(deployment().name, '-nsg')]",
       "type": "Microsoft.Resources/deployments",
       "properties": {
-        "mode": "Incremental",
+        "mode": "complete",
         "templateLink": {
-          "uri": "[concat(variables('uri'),'/securityRule/securityRule.json')]",
+          "uri": "[concat(variables('uri'),'/modules/resource/microsoft.networkSecurityGroups/azuredeploy.json')]",
           "contentVersion": "1.0.0.0"
         },
         "parameters": {
@@ -227,9 +227,9 @@
       "name": "[concat(deployment().name, '-lrs')]",
       "type": "Microsoft.Resources/deployments",
       "properties": {
-        "mode": "Incremental",
+        "mode": "complete",
         "templateLink": {
-          "uri": "[concat(variables('uri'),'/storageAccount/storageAccount.json')]",
+          "uri": "[concat(variables('uri'),'/modules/resource/microsoft.storage/azuredeploy.json')]",
           "contentVersion": "1.0.0.0"
         },
         "parameters": {
@@ -254,9 +254,9 @@
       "name": "[concat(deployment().name, '-nic')]",
       "type": "Microsoft.Resources/deployments",
       "properties": {
-        "mode": "Incremental",
+        "mode": "complete",
         "templateLink": {
-          "uri": "[concat(variables('uri'),'/networkInterface/networkInterface.json')]",
+          "uri": "[concat(variables('uri'),'/modules/resource/microsoft.network/azuredeploy.json')]",
           "contentVersion": "1.0.0.0"
         },
         "parameters": {
@@ -294,9 +294,9 @@
       "name": "[concat(deployment().name, '-vm')]",
       "type": "Microsoft.Resources/deployments",
       "properties": {
-        "mode": "Incremental",
+        "mode": "Complete",
         "templateLink": {
-          "uri": "[concat(variables('uri'),'/virtualMachine/linuxVM.json')]",
+          "uri": "[concat(variables('uri'),'/modules/resource/microsoft.virtualMachines/azuredeploy.linux.json')]",
           "contentVersion": "1.0.0.0"
         },
         "parameters": {

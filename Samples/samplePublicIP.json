@@ -37,9 +37,9 @@
       "name": "[concat(deployment().name, '-gov')]",
       "type": "Microsoft.Resources/deployments",
       "properties": {
-        "mode": "Incremental",
+        "mode": "complete",
         "templateLink": {
-          "uri": "[concat(variables('uri'),'/namingConvention/namingConvention.json')]",
+          "uri": "[concat(variables('uri'),'/modules/governance/governance.naming/azuredeploy.json')]",
           "contentVersion": "1.0.0.0"
         },
         "parameters": {
@@ -51,12 +51,12 @@
     },
     {
       "apiVersion": "2017-05-10",
-      "name": "[concat(deployment().name, '-nsg')]",
+      "name": "[concat(deployment().name, '-pip')]",
       "type": "Microsoft.Resources/deployments",
       "properties": {
-        "mode": "Incremental",
+        "mode": "complete",
         "templateLink": {
-          "uri": "[concat(variables('uri'),'/securityRule/securityRule.json')]",
+          "uri": "[concat(variables('uri'),'/modules/resource/microsoft.publicIp/azuredeploy.json')]",
           "contentVersion": "1.0.0.0"
         },
         "parameters": {
@@ -68,36 +68,6 @@
           },
           "contactEmail": {
             "value": "[parameters('contactEmail')]"
-          },
-          "networkSecurityGroupsSettings": {
-            "value": {
-              "securityRules": [
-                {
-                  "name": "RDPAllow",
-                  "description": "allow RDP connections",
-                  "direction": "Inbound",
-                  "priority": 100,
-                  "sourceAddressPrefix": "*",
-                  "destinationAddressPrefix": "10.0.0.0/24",
-                  "sourcePortRange": "*",
-                  "destinationPortRange": "3389",
-                  "access": "Allow",
-                  "protocol": "Tcp"
-                },
-                {
-                  "name": "HTTPAllow",
-                  "description": "allow HTTP connections",
-                  "direction": "Inbound",
-                  "priority": 200,
-                  "sourceAddressPrefix": "*",
-                  "destinationAddressPrefix": "10.0.1.0/24",
-                  "sourcePortRange": "*",
-                  "destinationPortRange": "80",
-                  "access": "Allow",
-                  "protocol": "Tcp"
-                }
-              ]
-            }
           }
         }
       },

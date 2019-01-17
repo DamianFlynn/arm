@@ -41,7 +41,7 @@ The following attributes are exported:
 Resource Groups can be imported using the resource id, e.g.
 
 ```bash
-az group deployment create -g BM-Demo01 --template-uri https://raw.githubusercontent.com/DamianFlynn/arm/master/NamingConvention/namingConvention.json --parameters '{\"companyName\": {\"value\": \"bm\"},\"projectName\": {\"value\": \"myProject\"},\"environment\": {\"value\": \"Test\"}}'
+az group deployment create -g BM-Demo01 --template-uri https://raw.githubusercontent.com/DamianFlynn/arm/master/modules/governance/governance.naming/azuredeploy.json --parameters '{\"companyName\": {\"value\": \"bm\"},\"projectName\": {\"value\": \"myProject\"},\"environment\": {\"value\": \"Test\"}}'
 ```
 
 ```json
@@ -54,7 +54,7 @@ az group deployment create -g BM-Demo01 --template-uri https://raw.githubusercon
     "debugSetting": null,
     "dependencies": [],
     "duration": "PT4.3722711S",
-    "mode": "Incremental",
+    "mode": "complete",
     "onErrorDeployment": null,
     "outputResources": [],
     "outputs": {
