@@ -44,6 +44,11 @@
       "location": "[parameters('location')]",
       "scale": null,
       "dependsOn": [],
+      "tags": {
+        "Contact": "[parameters('contactEmail')]",
+        "Project": "[parameters('name')]",
+        "Environment": "[parameters('environment')]"
+      },
       "properties": {
         "hardwareProfile": {
           "vmSize": "[parameters('vmSettings').vm_size]"
