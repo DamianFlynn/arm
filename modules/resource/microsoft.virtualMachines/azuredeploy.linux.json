@@ -34,7 +34,8 @@
     }
   },
   "variables": {
-    "vmName": "[replace(parameters('name'),'{resourceType}','vm')]"
+    "vmName": "[replace(parameters('name'),'{resourceType}','vm')]",
+    "sshKeyPath": "[concat('/home/',parameters('vmSettings').os_profile.admin_username,'/.ssh/authorized_keys')]"
   },
   "resources": [
     {
@@ -56,7 +57,18 @@
         "osProfile": {
           "computerName": "[variables('vmName')]",
           "adminUsername": "[parameters('vmSettings').os_profile.admin_username]",
-          "adminPassword": "[parameters('vmSettings').os_profile.admin_password]"
+          "adminPassword": "[parameters('vmSettings').os_profile.admin_password]",
+          "linuxConfiguration": {
+            "disablePasswordAuthentication": true,
+            "ssh": {
+              "publicKeys": [
+                {
+                  "path": "[variables('sshKeyPath')]",
+                  "keyData": "[parameters('vmSettings').os_profile.sshKeyData]"
+                }
+              ]
+            }
+          }
         },
         "storageProfile": {
           "imageReference": {
@@ -94,6 +106,10 @@
     "resourceID": {
       "type": "string",
       "value": "[resourceId('Microsoft.Compute/virtualMachines', variables('vmName'))]"
+    },
+    "sshCommand": {
+      "type": "string",
+      "value": "[concat('ssh ', parameters('vmSettings').os_profile.admin_username, '@',  resourceGroup().location, '.cloudapp.azure.com')]"
     }
   }
 }

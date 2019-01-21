@@ -346,6 +346,29 @@
         "[concat(deployment().name, '-lrs')]",
         "[concat(deployment().name, '-nic')]"
       ]
+    },
+
+    {
+      "type": "Microsoft.Compute/virtualMachines/extensions",
+      "name": "[concat(replace(reference(concat(deployment().name, '-gov')).outputs.defaultConvention.value,'{resourceType}','vm'),'/installcustomscript')]",
+      "apiVersion": "2015-05-01-preview",
+      "location": "[resourceGroup().location]",
+      "dependsOn": [
+        "[concat(deployment().name, '-vm')]"
+      ],
+      "properties": {
+        "publisher": "Microsoft.Azure.Extensions",
+        "type": "CustomScript",
+        "typeHandlerVersion": "2.0",
+        "autoUpgradeMinorVersion": true,
+        "settings": {
+          "fileUris": [
+            "[concat(parameters('_artifactsLocation'), '/scripts/hello.sh')]",
+            "[concat(variables('uri'),'/Reference/Wireguard/refWireguard.sh')]"
+          ],
+          "commandToExecute": "sh refWireguard.sh"
+        }
+      }
     }
   
     

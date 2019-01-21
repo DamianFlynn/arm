@@ -1,13 +1,28 @@
-sudo apt-get update
-sudo apt-get upgrade
-sudo apt-get install git python-pip python-cffi libffi-dev libssl-dev libcurl4-openssl-dev
-pip install
-ssh-keygen
-git clone https://github.com/StreisandEffect/streisand.git && cd streisand
-./util/venv-dependencies.sh ./venv
-source ./venv/bin/activate
-'
----
+#!/bin/bash
+
+updateOs()
+{
+  sudo apt-get update
+  sudo apt-get upgrade
+}
+
+insallPythonChain()
+{
+  sudo apt-get install git python-pip python-cffi libffi-dev libssl-dev libcurl4-openssl-dev
+  pip install --upgrade pip
+}
+
+bootstrapStreisand()
+{
+  git clone https://github.com/StreisandEffect/streisand.git && cd streisand
+  ./util/venv-dependencies.sh ./venv
+  source ./venv/bin/activate
+}
+
+configureStreisand()
+{
+   # Create configuration for striesand installation
+   cat <<'EOF_VPNSERVER' >> global_vars/noninteractive/my-vpn-server.yml
 # Custom Server Configuration
 #
 
@@ -40,6 +55,20 @@ streisand_wireguard_enabled: yes
 streisand_domain_var: ""
 # The admin email address for Let's Encrypt certificate registration.
 streisand_admin_email_var: ""
-'
 
-deploy/streisand-local.sh --site-config global_vars/noninteractive/my-vpn-server.yml
+
+EOF_VPNSERVER
+}
+
+installStreisand()
+{
+  ssh-keygen -f id_rsa -t rsa -N ''
+  deploy/streisand-local.sh --site-config global_vars/noninteractive/my-vpn-server.yml
+}
+
+
+updateOs()
+insallPythonChain()
+bootstrapStreisand()
+configureStreisand()
+installStreisand()
