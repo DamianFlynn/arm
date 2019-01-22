@@ -9,6 +9,13 @@
         "description": "Short description of the project"
       }
     },
+    "sshKeyData": {
+      "type": "string",
+      "minLength": 2,
+      "metadata": {
+        "description": "SSH Key"
+      }
+    },
     "contactEmail": {
       "type": "string",
       "defaultValue": "damian.flynn@innofactor.com"
@@ -332,7 +339,8 @@
               "os_profile": {
                 "computer_name":   "hostname",
                 "admin_username":  "sysadmin",
-                "admin_password":  "Password1234!"
+                "admin_password":  "Password1234!",
+                "sshKeyData": "[parameters('sshKeyData')]"
               },
               "os_profile_linux_config": {
                 "disable_password_authentication": "false"

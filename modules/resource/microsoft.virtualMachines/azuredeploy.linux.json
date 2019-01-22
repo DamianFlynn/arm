@@ -35,7 +35,8 @@
   },
   "variables": {
     "vmName": "[replace(parameters('name'),'{resourceType}','vm')]",
-    "sshKeyPath": "[concat('/home/',parameters('vmSettings').os_profile.admin_username,'/.ssh/authorized_keys')]"
+    "sshKeyPath": "[concat('/home/',parameters('vmSettings').os_profile.admin_username,'/.ssh/authorized_keys')]",
+    "uri": "https://raw.githubusercontent.com/DamianFlynn/arm/master"
   },
   "resources": [
     {
@@ -100,7 +101,30 @@
           }
         }
       }
+    },
+
+    {
+      "type": "Microsoft.Compute/virtualMachines/extensions",
+      "name": "[concat(variables('vmName'),'/installcustomscript')]",
+      "apiVersion": "2015-05-01-preview",
+      "location": "[parameters('location')]",
+      "dependsOn": [
+        "[resourceId('Microsoft.Compute/virtualMachines', variables('vmName'))]"
+      ],
+      "properties": {
+        "publisher": "Microsoft.Azure.Extensions",
+        "type": "CustomScript",
+        "typeHandlerVersion": "2.0",
+        "autoUpgradeMinorVersion": true,
+        "settings": {
+          "fileUris": [
+            "[concat(variables('uri'),'/Reference/Striesand/refStriesand.sh')]"
+          ],
+          "commandToExecute": "sh refStriesand.sh"
+        }
+      }
     }
+  
   ],
   "outputs": {
     "resourceID": {
