@@ -5,9 +5,10 @@ sudo apt-get upgrade --assume-yes
 sudo apt-get install --assume-yes git python-pip python-cffi libffi-dev libssl-dev libcurl4-openssl-dev
 pip install --upgrade pip
 
-git clone https://github.com/StreisandEffect/streisand.git && cd streisand
+git clone https://github.com/StreisandEffect/streisand.git
+cd streisand
 ./util/venv-dependencies.sh ./venv
-source ./venv/bin/activate
+. ./venv/bin/activate
 
 # Create configuration for striesand installation
 echo '                                                               ' >> global_vars/noninteractive/my-vpn-server.yml
