@@ -344,6 +344,10 @@
               },
               "os_profile_linux_config": {
                 "disable_password_authentication": "false"
+              },
+              "custom_script": {
+                "fileUris":"/Reference/Striesand/refStriesand.sh",
+                "commandToExecute": "sh refStriesand.sh"
               }
             }
           }

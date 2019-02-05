@@ -118,9 +118,9 @@
         "autoUpgradeMinorVersion": true,
         "settings": {
           "fileUris": [
-            "[concat(variables('uri'),'/Reference/Striesand/refStriesand.sh')]"
+            "[concat(variables('uri'),parameters('vmSettings').custom_script.fileUris)]"
           ],
-          "commandToExecute": "sh refStriesand.sh"
+          "commandToExecute": "[parameters('vmSettings').custom_script.commandToExecute]"
         }
       }
     }
