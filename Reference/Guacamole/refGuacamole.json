@@ -319,7 +319,7 @@
               },
               "custom_script": {
                 "fileUris":"/Reference/Guacamole/guac-install.sh",
-                "commandToExecute": "sh guac-install.sh --mysqlpwd Password1234! --guacpwd Password1234!"
+                "commandToExecute": "bash guac-install.sh --mysqlpwd Password1234! --guacpwd Password1234!"
               }
             }
           }
