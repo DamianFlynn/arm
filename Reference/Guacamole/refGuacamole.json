@@ -145,19 +145,7 @@
             "value": {
               "securityRules": [
                 {
-                  "name": "RDPAllow",
-                  "description": "allow RDP connections",
-                  "direction": "Inbound",
-                  "priority": 100,
-                  "sourceAddressPrefix": "*",
-                  "destinationAddressPrefix": "10.0.0.0/24",
-                  "sourcePortRange": "*",
-                  "destinationPortRange": "3389",
-                  "access": "Allow",
-                  "protocol": "Tcp"
-                },
-                {
-                  "name": "AllowNGINX",
+                  "name": "AllowHTTPS",
                   "description": "",
                   "direction": "Inbound",
                   "priority": 101,
@@ -176,7 +164,7 @@
                   "name": "AllowSSHTCP",
                   "description": "",
                   "direction": "Inbound",
-                  "priority": 108,
+                  "priority": 102,
                   "sourceAddressPrefix": "*",
                   "destinationAddressPrefix": "*",
                   "sourcePortRange": "*",
@@ -189,30 +177,14 @@
                   "destinationAddressPrefixes": []
                 },
                 {
-                  "name": "AllowWireguard",
-                  "description": "",
-                  "direction": "Inbound",
-                  "priority": 112,
-                  "sourceAddressPrefix": "*",
-                  "destinationAddressPrefix": "*",
-                  "sourcePortRange": "*",
-                  "destinationPortRange": "51820",
-                  "access": "Allow",
-                  "protocol": "Udp",
-                  "sourceAddressPrefixes": [],
-                  "destinationAddressPrefixes": [],
-                  "sourcePortRanges": [],
-                  "destinationPortRanges": []
-                },
-                {
                   "name": "AllowHTTP",
                   "description": "allow HTTP connections",
                   "direction": "Inbound",
-                  "priority": 120,
+                  "priority": 103,
                   "sourceAddressPrefix": "*",
                   "destinationAddressPrefix": "*",
                   "sourcePortRange": "*",
-                  "destinationPortRange": "80",
+                  "destinationPortRange": "8080",
                   "access": "Allow",
                   "protocol": "Tcp",
                   "sourcePortRanges": [],
@@ -346,7 +318,7 @@
                 "disable_password_authentication": "false"
               },
               "custom_script": {
-                "fileUris":"/Reference/Guacomle/guac-install.sh",
+                "fileUris":"/Reference/Guacamole/guac-install.sh",
                 "commandToExecute": "sh guac-install.sh"
               }
             }
