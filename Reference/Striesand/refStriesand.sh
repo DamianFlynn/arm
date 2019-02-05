@@ -46,5 +46,5 @@ echo '# The admin email address for Lets Encrypt certificate reg     ' >> global
 echo 'streisand_admin_email_var: ""                                  ' >> global_vars/noninteractive/my-vpn-server.yml
 echo '                                                               ' >> global_vars/noninteractive/my-vpn-server.yml
 
-ssh-keygen -f id_rsa -t rsa -N ''
-deploy/streisand-local.sh --site-config global_vars/noninteractive/my-vpn-server.yml
+#ssh-keygen -f id_rsa -t rsa -N ''
+#deploy/streisand-local.sh --site-config global_vars/noninteractive/my-vpn-server.yml
