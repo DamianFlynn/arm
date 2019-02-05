@@ -1,0 +1,370 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "projectName": {
+      "type": "string",
+      "minLength": 2,
+      "metadata": {
+        "description": "Short description of the project"
+      }
+    },
+    "sshKeyData": {
+      "type": "string",
+      "minLength": 2,
+      "metadata": {
+        "description": "SSH Key"
+      }
+    },
+    "contactEmail": {
+      "type": "string",
+      "defaultValue": "damian.flynn@innofactor.com"
+    },
+    "environment": {
+      "type": "string",
+      "allowedValues": [
+        "Prod",
+        "Test",
+        "Dev",
+        "POC"
+      ],
+      "defaultValue": "Dev",
+      "metadata": {
+        "description": "Type of environment"
+      }
+    }
+  },
+  "variables": {
+    "uri": "https://raw.githubusercontent.com/DamianFlynn/arm/master"
+  },
+  "functions": [],
+  "resources": [
+    {
+      "apiVersion": "2017-05-10",
+      "name": "[concat(deployment().name, '-gov')]",
+      "type": "Microsoft.Resources/deployments",
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[concat(variables('uri'),'/modules/governance/governance.naming/azuredeploy.json')]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "projectName": {
+            "value": "[parameters('projectName')]"
+          }
+        }
+      }
+    },
+    {
+      "apiVersion": "2017-05-10",
+      "name": "[concat(deployment().name, '-pip')]",
+      "type": "Microsoft.Resources/deployments",
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[concat(variables('uri'),'/modules/resource/microsoft.publicIP/azuredeploy.json')]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "name": {
+            "value": "[reference(concat(deployment().name, '-gov')).outputs.defaultConvention.value]"
+          },
+          "environment": {
+            "value": "[parameters('environment')]"
+          },
+          "contactEmail": {
+            "value": "[parameters('contactEmail')]"
+          }
+        }
+      },
+      "dependsOn": [
+        "[concat(deployment().name, '-gov')]"
+      ]
+    },
+
+    {
+      "apiVersion": "2017-05-10",
+      "name": "[concat(deployment().name, '-vnet')]",
+      "type": "Microsoft.Resources/deployments",
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[concat(variables('uri'),'/modules/resource/microsoft.network/azuredeploy.json')]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "name": {
+            "value": "[reference(concat(deployment().name, '-gov')).outputs.defaultConvention.value]"
+          },
+          "environment": {
+            "value": "[parameters('environment')]"
+          },
+          "contactEmail": {
+            "value": "[parameters('contactEmail')]"
+          },
+          "networkSettings": {
+            "value": {
+              "addressSpace": "10.10.0.0/16",
+              "subnets": [
+                {
+                  "name": "private",
+                  "addressPrefix": "10.10.0.0/24"
+                }
+              ]
+            }
+          }
+        }
+      },
+      "dependsOn": [
+        "[concat(deployment().name, '-gov')]"
+      ]
+    },
+
+    {
+      "apiVersion": "2017-05-10",
+      "name": "[concat(deployment().name, '-nsg')]",
+      "type": "Microsoft.Resources/deployments",
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[concat(variables('uri'),'/modules/resource/microsoft.networkSecurityGroups/azuredeploy.json')]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "name": {
+            "value": "[reference(concat(deployment().name, '-gov')).outputs.defaultConvention.value]"
+          },
+          "environment": {
+            "value": "[parameters('environment')]"
+          },
+          "contactEmail": {
+            "value": "[parameters('contactEmail')]"
+          },
+          "networkSecurityGroupsSettings": {
+            "value": {
+              "securityRules": [
+                {
+                  "name": "RDPAllow",
+                  "description": "allow RDP connections",
+                  "direction": "Inbound",
+                  "priority": 100,
+                  "sourceAddressPrefix": "*",
+                  "destinationAddressPrefix": "10.0.0.0/24",
+                  "sourcePortRange": "*",
+                  "destinationPortRange": "3389",
+                  "access": "Allow",
+                  "protocol": "Tcp"
+                },
+                {
+                  "name": "AllowNGINX",
+                  "description": "",
+                  "direction": "Inbound",
+                  "priority": 101,
+                  "sourceAddressPrefix": "*",
+                  "destinationAddressPrefix": "*",
+                  "sourcePortRange": "*",
+                  "destinationPortRange": "443",
+                  "access": "Allow",
+                  "protocol": "Tcp",
+                  "sourcePortRanges": [],
+                  "destinationPortRanges": [],
+                  "sourceAddressPrefixes": [],
+                  "destinationAddressPrefixes": []
+                },
+                {
+                  "name": "AllowSSHTCP",
+                  "description": "",
+                  "direction": "Inbound",
+                  "priority": 108,
+                  "sourceAddressPrefix": "*",
+                  "destinationAddressPrefix": "*",
+                  "sourcePortRange": "*",
+                  "destinationPortRange": "22",
+                  "access": "Allow",                 
+                  "protocol": "Tcp",
+                  "sourcePortRanges": [],
+                  "destinationPortRanges": [],
+                  "sourceAddressPrefixes": [],
+                  "destinationAddressPrefixes": []
+                },
+                {
+                  "name": "AllowWireguard",
+                  "description": "",
+                  "direction": "Inbound",
+                  "priority": 112,
+                  "sourceAddressPrefix": "*",
+                  "destinationAddressPrefix": "*",
+                  "sourcePortRange": "*",
+                  "destinationPortRange": "51820",
+                  "access": "Allow",
+                  "protocol": "Udp",
+                  "sourceAddressPrefixes": [],
+                  "destinationAddressPrefixes": [],
+                  "sourcePortRanges": [],
+                  "destinationPortRanges": []
+                },
+                {
+                  "name": "AllowHTTP",
+                  "description": "allow HTTP connections",
+                  "direction": "Inbound",
+                  "priority": 120,
+                  "sourceAddressPrefix": "*",
+                  "destinationAddressPrefix": "*",
+                  "sourcePortRange": "*",
+                  "destinationPortRange": "80",
+                  "access": "Allow",
+                  "protocol": "Tcp",
+                  "sourcePortRanges": [],
+                  "destinationPortRanges": [],
+                  "sourceAddressPrefixes": [],
+                  "destinationAddressPrefixes": []
+                }
+              ]
+            }
+          }
+        }
+      },
+      "dependsOn": [
+        "[concat(deployment().name, '-gov')]"
+      ]
+    },
+    {
+      "apiVersion": "2017-05-10",
+      "name": "[concat(deployment().name, '-lrs')]",
+      "type": "Microsoft.Resources/deployments",
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[concat(variables('uri'),'/modules/resource/microsoft.storage/azuredeploy.json')]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "name": {
+            "value": "[reference(concat(deployment().name, '-gov')).outputs.storageConvention.value]"
+          },
+          "environment": {
+            "value": "[parameters('environment')]"
+          },
+          "contactEmail": {
+            "value": "[parameters('contactEmail')]"
+          }
+        }
+      },
+      "dependsOn": [
+        "[concat(deployment().name, '-gov')]"
+      ]
+    },
+
+    {
+      "apiVersion": "2017-05-10",
+      "name": "[concat(deployment().name, '-nic')]",
+      "type": "Microsoft.Resources/deployments",
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[concat(variables('uri'),'/modules/resource/microsoft.networkInterfaces/azuredeploy.json')]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "name": {
+            "value": "[reference(concat(deployment().name, '-gov')).outputs.defaultConvention.value]"
+          },
+          "publicIpAddressId": {
+            "value": "[reference(concat(deployment().name, '-pip')).outputs.resourceId.value]"
+          },
+          "nsgId": {
+            "value": "[reference(concat(deployment().name, '-nsg')).outputs.resourceId.value]"
+          },
+          "virtualNetworkName": {
+            "value": "[reference(concat(deployment().name, '-vnet')).outputs.resourceName.value]"
+          },
+          "subnetName": {
+            "value": "private"
+          },
+          "environment": {
+            "value": "[parameters('environment')]"
+          },
+          "contactEmail": {
+            "value": "[parameters('contactEmail')]"
+          }
+        }
+      },
+      "dependsOn": [
+        "[concat(deployment().name, '-gov')]",
+        "[concat(deployment().name, '-pip')]"
+      ]
+    },
+
+    {
+      "apiVersion": "2017-05-10",
+      "name": "[concat(deployment().name, '-vm')]",
+      "type": "Microsoft.Resources/deployments",
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[concat(variables('uri'),'/modules/resource/microsoft.virtualMachines/azuredeploy.linux.json')]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "name": {
+            "value": "[reference(concat(deployment().name, '-gov')).outputs.defaultConvention.value]"
+          },
+          "environment": {
+            "value": "[parameters('environment')]"
+          },
+          "contactEmail": {
+            "value": "[parameters('contactEmail')]"
+          },
+          "vmSettings": {
+            "value": {
+              "network_interface_id" : "[reference(concat(deployment().name, '-nic')).outputs.resourceID.value]",
+              "diagStorage":"[reference(concat(deployment().name, '-lrs')).outputs.resourceID.value]",
+              "vm_size": "Standard_B1s",
+
+              "storage_image_reference": {
+                "publisher": "Canonical",
+                "offer": "UbuntuServer",
+                "sku": "16.04-LTS",
+                "version": "16.04.201811140"
+              },
+
+              "storage_os_disk": {
+                "name":              "myosdisk1",
+                "caching":           "ReadWrite",
+                "create_option":     "FromImage",
+                "managed_disk_type": "Standard_LRS"
+              },
+
+              "os_profile": {
+                "computer_name":   "hostname",
+                "admin_username":  "sysadmin",
+                "admin_password":  "Password1234!",
+                "sshKeyData": "[parameters('sshKeyData')]"
+              },
+              "os_profile_linux_config": {
+                "disable_password_authentication": "false"
+              }
+            }
+          }
+        }
+      },
+      "dependsOn": [
+        "[concat(deployment().name, '-gov')]",
+        "[concat(deployment().name, '-lrs')]",
+        "[concat(deployment().name, '-nic')]"
+      ]
+    }
+
+  ],
+  "outputs": {
+    "defaultConvention": {
+      "type": "string",
+      "value": "[reference(concat(deployment().name, '-gov')).outputs.defaultConvention.value]"
+    },
+    "storageConvention": {
+      "type": "string",
+      "value": "[reference(concat(deployment().name, '-gov')).outputs.storageConvention.value]"
+    }
+  }
+}
