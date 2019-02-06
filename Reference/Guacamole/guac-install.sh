@@ -1,6 +1,12 @@
 #!/bin/bash
 
 ## Original Script by MysticRyuujin/guac-install
+##
+## Todo:
+## * Add Zer0CoolX Custom Login Screen 
+##   [https://github.com/Zer0CoolX/guacamole-customize-loginscreen-extension]
+## * Azure AD Auth
+##
 
 # Check if user is root or sudo
 if ! [ $(id -u) = 0 ]; then echo "Please run this script as sudo or root"; exit 1 ; fi
@@ -161,6 +167,15 @@ if [ $? -ne 0 ]; then
     exit 1
 fi
 echo -e "${GREEN}Downloaded guacamole-auth-jdbc-${GUACVERSION}.tar.gz${NC}"
+
+# Download Zer0CoolX Guacamole Brandings extension
+wget -q --show-progress -O brandings.jar https://github.com/Zer0CoolX/guacamole-customize-loginscreen-extension/raw/master/branding.jar
+if [ $? -ne 0 ]; then
+    echo -e "${RED}Failed to download branding.jar"
+    echo -e "https://github.com/Zer0CoolX/guacamole-customize-loginscreen-extension/raw/master/branding.jar"
+    exit 1
+fi
+echo -e "${GREEN}Downloaded branding.jar${NC}"
 
 echo -e "${GREEN}Downloading complete.${NC}"
 
