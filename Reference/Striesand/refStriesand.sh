@@ -1,25 +1,45 @@
 #!/bin/bash
-echo "Setting Frontend as Non-Interactive"
+echo "###-- Setting Frontend as Non-Interactive"
 export DEBIAN_FRONTEND=noninteractive
-echo "OS Update Procedure"
-sudo apt-get update --assume-yes
-echo "OS Upgrade Procedure"
-sudo apt-get upgrade --assume-yes
-echo "Installing Toolchain"
+
+# Skipping the OS Upate due to BUG - https://github.com/Azure/WALinuxAgent/issues/1459
+#echo "OS Update Procedure"
+#sudo apt-get update --assume-yes
+#echo "OS Upgrade Procedure"
+#sudo apt-get upgrade --assume-yes
+
+echo "###-- Installing Toolchain"
 sudo apt-get install --assume-yes git python-pip python-cffi libffi-dev libssl-dev libcurl4-openssl-dev
 pip install --upgrade pip
-echo "Downloading Installer Repository"
+
+echo "###-- Generate a new SSH Key Pair"
+whoami
+ssh-keygen -f $HOME/.ssh/id_rsa -t rsa -N ''
+
+echo "###-- Downloading Installer Repository"
 git clone https://github.com/StreisandEffect/streisand.git
-echo "Changing to striesand repo"
+
+# Assume the Azure Public IP is valid
+sed -i '/for the VPN/d' ./streisand/playbooks/roles/common/tasks/detect-public-ip.yml
+sed -i '/to skip and use/d' ./streisand/playbooks/roles/common/tasks/detect-public-ip.yml
+sed -i '/if you do not know/d' ./streisand/playbooks/roles/common/tasks/detect-public-ip.yml
+sed -i '/Ask user to update to public IP/d' ./streisand/playbooks/roles/common/tasks/detect-public-ip.yml
+sed -i '/pause/d' ./streisand/playbooks/roles/common/tasks/detect-public-ip.yml
+sed -i '/{{ prompt_external_ip/d' ./streisand/playbooks/roles/common/tasks/detect-public-ip.yml
+sed -i '/publish_external/d' ./streisand/playbooks/roles/common/tasks/detect-public-ip.yml
+
+
+### Virtual Environment Work
+echo "###-- Changing to striesand repo"
 cd streisand
-echo "Prepare the Python Virtual Environment"
+echo "###-- Prepare the Python Virtual Environment"
 ./util/venv-dependencies.sh ./venv
-echo "Active the Virtual Environment"
-. ./venv/bin/activate
+echo "###-- Active the Virtual Environment"
+source "./venv/bin/activate"
 
 # Create configuration for striesand installation
-echo "Create our Installation Configuration"
-echo '                                                               ' >> global_vars/noninteractive/my-vpn-server.yml
+echo "###-- Create our Installation Configuration"
+echo '                                                               ' >  global_vars/noninteractive/my-vpn-server.yml
 echo '# Custom Server Configuration                                  ' >> global_vars/noninteractive/my-vpn-server.yml
 echo '#                                                              ' >> global_vars/noninteractive/my-vpn-server.yml
 echo '                                                               ' >> global_vars/noninteractive/my-vpn-server.yml
@@ -54,8 +74,7 @@ echo '# The admin email address for Lets Encrypt certificate reg     ' >> global
 echo 'streisand_admin_email_var: ""                                  ' >> global_vars/noninteractive/my-vpn-server.yml
 echo '                                                               ' >> global_vars/noninteractive/my-vpn-server.yml
 
-echo "Generate a new SSH Key Pair"
-#ssh-keygen -f id_rsa -t rsa -N ''
-#echo "Start the Installation"
-#deploy/streisand-local.sh --site-config global_vars/noninteractive/my-vpn-server.yml
-echo "Done!"
+echo "###-- Start the Installation"
+deploy/streisand-local.sh --site-config global_vars/noninteractive/my-vpn-server.yml
+
+echo "###-- Done!"
