@@ -2,6 +2,10 @@
 echo "###-- Setting Frontend as Non-Interactive"
 export DEBIAN_FRONTEND=noninteractive
 
+### PPA for current Ansible Code
+echo "Ansible Repo"
+sudo apt-add-repository --yes --update ppa:ansible/ansible
+
 echo "OS Update Procedure"
 sudo apt-get update --assume-yes
 
@@ -13,7 +17,7 @@ echo "OS Upgrade Procedure"
 sudo apt-get upgrade --assume-yes
 
 echo "###-- Installing Toolchain"
-sudo apt-get install --assume-yes git python-pip python-cffi libffi-dev libssl-dev libcurl4-openssl-dev ansible
+sudo apt-get install --assume-yes git python-pip python-cffi libffi-dev libssl-dev libcurl4-openssl-dev software-properties-common ansible
 pip install --upgrade pip
 
 echo "###-- Generate a new SSH Key Pair"
