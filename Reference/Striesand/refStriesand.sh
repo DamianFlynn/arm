@@ -13,7 +13,7 @@ echo "OS Upgrade Procedure"
 sudo apt-get upgrade --assume-yes
 
 echo "###-- Installing Toolchain"
-sudo apt-get install --assume-yes git python-pip python-cffi libffi-dev libssl-dev libcurl4-openssl-dev
+sudo apt-get install --assume-yes git python-pip python-cffi libffi-dev libssl-dev libcurl4-openssl-dev ansible
 pip install --upgrade pip
 
 echo "###-- Generate a new SSH Key Pair"
