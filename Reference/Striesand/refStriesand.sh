@@ -4,9 +4,13 @@ export DEBIAN_FRONTEND=noninteractive
 
 echo "OS Update Procedure"
 sudo apt-get update --assume-yes
-# Skipping the OS Upate due to BUG - https://github.com/Azure/WALinuxAgent/issues/1459
-#echo "OS Upgrade Procedure"
-#sudo apt-get upgrade --assume-yes
+
+# Skipping the Linux Agent Upate due to BUG - https://github.com/Azure/WALinuxAgent/issues/1459
+echo "Block the Linux Azure Agent Update"
+apt-mark hold walinuxagent
+
+echo "OS Upgrade Procedure"
+sudo apt-get upgrade --assume-yes
 
 echo "###-- Installing Toolchain"
 sudo apt-get install --assume-yes git python-pip python-cffi libffi-dev libssl-dev libcurl4-openssl-dev
