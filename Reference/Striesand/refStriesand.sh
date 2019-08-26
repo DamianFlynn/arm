@@ -2,9 +2,9 @@
 echo "###-- Setting Frontend as Non-Interactive"
 export DEBIAN_FRONTEND=noninteractive
 
+echo "OS Update Procedure"
+sudo apt-get update --assume-yes
 # Skipping the OS Upate due to BUG - https://github.com/Azure/WALinuxAgent/issues/1459
-#echo "OS Update Procedure"
-#sudo apt-get update --assume-yes
 #echo "OS Upgrade Procedure"
 #sudo apt-get upgrade --assume-yes
 
