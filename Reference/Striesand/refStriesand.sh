@@ -22,6 +22,7 @@ pip install --upgrade pip
 
 echo "###-- Generate a new SSH Key Pair"
 whoami
+sudo mkdir $HOME/.ssh
 ssh-keygen -f $HOME/.ssh/id_rsa -t rsa -N ''
 
 echo "###-- Downloading Installer Repository"
