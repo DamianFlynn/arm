@@ -22,8 +22,8 @@ pip install --upgrade pip
 
 echo "###-- Generate a new SSH Key Pair"
 whoami
-sudo mkdir $HOME/.ssh
-ssh-keygen -f $HOME/.ssh/id_rsa -t rsa -N ''
+sudo mkdir /root/.ssh
+ssh-keygen -f /root/.ssh/id_rsa -t rsa -N ''
 
 echo "###-- Downloading Installer Repository"
 git clone https://github.com/StreisandEffect/streisand.git
@@ -84,6 +84,7 @@ echo 'streisand_admin_email_var: ""                                  ' >> global
 echo '                                                               ' >> global_vars/noninteractive/my-vpn-server.yml
 
 echo "###-- Start the Installation"
+whoami
 deploy/streisand-local.sh --site-config global_vars/noninteractive/my-vpn-server.yml
 
 echo "###-- Done!"
